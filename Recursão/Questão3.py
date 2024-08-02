@@ -1,23 +1,50 @@
-#Eita como calculaaa
-def calculo_mdc(a,b):
-    if b == 0:
-        return a
-    return calculo_mdc(b, a % b)    
-#Numeros e numerais
-numero = int(input())
-soma_mdc = 0
-# laçozinho para repetição
-for _ in range(numero):
-    incursao = input().split()
-    x = int(incursao[0].replace(" ", ""))
-    y = int(incursao[1].replace(" ", ""))
+#A partir daqui é so sofrimento
+def palavra_contida(linha_orc, palavra):
 
-    resultado_mdc = calculo_mdc(x,y)
+    if not palavra:
+        return True
+    if linha_orc.startswith(palavra):
+        return True
+    if len(linha_orc) > len(palavra):
+        return palavra_contida(linha_orc[1:], palavra)
+    
+    return False
+#Ele sabe ler, ja eu to quase analfabeto :((
+def ler_frases(linha_orc, frases, numero_frases=1):
 
-    print(f"O MDC entre {x} e {y} é {resultado_mdc}")
-# somatorio dos minimos divisores comuns :))
-    if resultado_mdc != 0:
-        soma_mdc += resultado_mdc
+    if not frases:
+        print("Pensou que me enganaria? A magia da recursão me disse que a senha não pode ser nenhuma dessas")
+        return
+    
+    frases_atual = frases.pop(0)
+    palavras = frases_atual.split()
+    palavras_normalizada = [palavra.lower() for palavra in palavras]
+#tem muita palavra contida nesse hobgoblin
+    todas_palavras_contidas = True
+    for palavra in palavras_normalizada:
+        if not palavra_contida(linha_orc, palavra):
+            todas_palavras_contidas = False
 
-print(f"\nA senha final foi {soma_mdc}")
+    if todas_palavras_contidas:
+        print(f"Já sei, a senha é a frase número {numero_frases}")
+        return
+#Chamando a função
+    ler_frases(linha_orc, frases, numero_frases + 1)
+#vamos ver se tem fim ne 
+def leitura(linha_orc=None, frases=None, numero_frases=1):
+    if linha_orc is None:
+        linha_orc = input().lower()
+    if frases is None:
+        frases = [] 
 
+    linha = input()
+    if linha == "Decifra-me ou te devoro!":
+        ler_frases(linha_orc, frases)
+    else:
+        frases.append(linha)
+        leitura(linha_orc, frases, numero_frases + 1)
+#função IN to função
+def principal():
+    leitura()
+
+principal()
